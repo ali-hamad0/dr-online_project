@@ -1,0 +1,128 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 12px 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* Left side (logo) */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  color: #222;
+}
+
+.brand {
+  color: #007bff;
+}
+
+/* Toggle (hamburger) icon */
+.menu-toggle {
+  display: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #007bff;
+  background: transparent;
+  border: none;
+}
+
+/* Links (center) */
+.navbar-links {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: #007bff;
+}
+
+.navbar-links a.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+  padding-bottom: 2px;
+}
+
+/* Right side (auth) */
+.navbar-right,
+.navbar-auth {  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-user {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.login-btn,
+.register-btn,
+.logout-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.login-btn:hover,
+.register-btn:hover,
+.logout-btn:hover {
+  background: #005fcc;
+}
+
+/* Responsive Menu */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    position: absolute;
+    top: 58px;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 15px 0;
+    border-top: 1px solid #ddd;
+    display: none;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-right,
+  .navbar-auth {
+    display: none;  
+  }
+}

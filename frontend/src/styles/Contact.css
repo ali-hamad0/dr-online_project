@@ -1,0 +1,225 @@
+ 
+.contact {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #f6faff 0%, #e0f2ff 100%);
+  color: #333;
+  min-height: 100vh;
+  padding: 80px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- LAYOUT ---------- */
+.contact-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0, 119, 204, 0.1);
+  border-radius: 20px;
+  padding: 50px 40px;
+  max-width: 1100px;
+  width: 100%;
+  animation: fadeUp 0.8s ease;
+}
+ 
+.contact-img {
+  width: 100%;
+  max-width: 340px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(0, 119, 204, 0.25);
+  object-fit: cover;
+}
+
+/* ---------- LEFT SIDE ---------- */
+.contact-left {
+  flex: 1 1 400px;
+}
+
+.contact-left h1 {
+  font-size: 2.5rem;
+  color: #0077cc;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.brand {
+  background: linear-gradient(90deg, #0077cc, #00bcd4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-left p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.contact-info {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.contact-info li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ---------- RIGHT SIDE (FORM) ---------- */
+.contact-right {
+  flex: 1 1 450px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 119, 204, 0.08);
+  padding: 35px 30px;
+  animation: fadeUp 1s ease;
+}
+
+.contact-right form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-right label {
+  font-weight: 600;
+  color: #0077cc;
+  margin-bottom: 3px;
+}
+
+.contact-right input,
+.contact-right select,
+.contact-right textarea {
+  width: 90%;
+  padding: 12px 15px;
+  border: 1.5px solid #cce0ff;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  background: #fdfdfd;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.contact-right input:focus,
+.contact-right select:focus,
+.contact-right textarea:focus {
+  border-color: #0077cc;
+  box-shadow: 0 0 10px rgba(0, 119, 204, 0.25);
+  transform: scale(1.01);
+}
+
+.contact-right textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* ---------- BUTTON ---------- */
+.send-btn {
+  background: linear-gradient(135deg, #0077cc, #00bcd4);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: flex-end;
+  box-shadow: 0 5px 15px rgba(0, 119, 204, 0.25);
+}
+
+.send-btn:hover {
+  background: linear-gradient(135deg, #00bcd4, #0077cc);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 119, 204, 0.35);
+}
+
+/* ---------- SUCCESS MESSAGE ---------- */
+.success-msg {
+  color: #2e7d32;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
+  animation: fadeIn 0.6s ease;
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 992px) {
+  .contact-section {
+    padding: 40px 25px;
+    gap: 40px;
+  }
+
+  .contact-left h1 {
+    font-size: 2.2rem;
+  }
+
+  .contact-left p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .contact {
+    padding: 60px 6%;
+  }
+
+  .contact-img {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .contact-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 35px 20px;
+  }
+
+  .contact-left,
+  .contact-right {
+    width: 100%;
+  }
+
+  .contact-right {
+    padding: 25px 20px;
+  }
+
+  .send-btn {
+    width: 100%;
+    align-self: center;
+  }
+}

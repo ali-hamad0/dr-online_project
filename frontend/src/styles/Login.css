@@ -1,0 +1,196 @@
+/* ===========================================
+   💠 Dr. Online - Login (Compatible with new forms)
+   =========================================== */
+
+/* كان اسمها .login، هلق ضفنا .login-container */
+.login,
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eaf6ff 0%, #ffffff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  padding: 50px 20px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* ---------- Header Text ---------- */
+.login h1,
+.login-container h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #0077cc;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.login p,
+.login-container p {
+  font-size: 1.05rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* ---------- Form Container ---------- */
+/* كان اسمها .login-form، هلق الفورم ما عنده class */
+.login-form,
+.login-container form {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 119, 204, 0.15);
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  backdrop-filter: blur(10px);
+  animation: fadeUp 0.8s ease;
+}
+
+/* ---------- Labels ---------- */
+.login-form label,
+.login-container label {
+  text-align: left;
+  font-weight: 600;
+  color: #0077cc;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+/* ---------- Inputs ---------- */
+.login-form input,
+.login-container input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #cce0ff;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.login-form input:focus,
+.login-container input:focus {
+  border-color: #0077cc;
+  box-shadow: 0 0 10px rgba(0, 119, 204, 0.25);
+  background: white;
+  transform: scale(1.01);
+}
+
+/* ---------- Error Message (لو رجّعت error-text) ---------- */
+.error-text {
+  color: #e53935;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  background: rgba(229, 57, 53, 0.05);
+  border-left: 4px solid #e53935;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+/* ---------- Login Button ---------- */
+/* زر الفورم الجديد ما عنده class، فغطيناه */
+.login-btn,
+.login-container form button[type="submit"] {
+  background: linear-gradient(135deg, #0077cc, #00bcd4);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 119, 204, 0.25);
+}
+
+.login-btn:hover,
+.login-container form button[type="submit"]:hover {
+  background: linear-gradient(135deg, #00bcd4, #0077cc);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 119, 204, 0.35);
+}
+
+/* ---------- Register Link ---------- */
+.register-link {
+  margin-top: 20px;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.register-link span {
+  color: #0077cc;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.register-link span:hover {
+  color: #00bcd4;
+  text-decoration: underline;
+}
+
+/* ---------- Logged-in message box ---------- */
+.logged-in-message {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  padding: 35px 25px;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 119, 204, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeUp 0.8s ease;
+}
+
+.logged-in-message button {
+  background: linear-gradient(135deg, #0077cc, #00bcd4);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.logged-in-message button:hover {
+  background: linear-gradient(135deg, #00bcd4, #0077cc);
+  transform: translateY(-2px);
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 600px) {
+  .login h1,
+  .login-container h1 {
+    font-size: 2rem;
+  }
+
+  .login p,
+  .login-container p {
+    font-size: 1rem;
+  }
+
+  .login-form,
+  .login-container form {
+    padding: 30px 20px;
+  }
+
+  .login-btn,
+  .login-container form button[type="submit"] {
+    font-size: 0.95rem;
+  }
+}
