@@ -24,7 +24,7 @@ app.use("/uploads", express.static(uploadsDir));
 // ===============================
 const db = mysql.createConnection({
   host: "localhost",
-  port: 3307,
+  port: 3307 || process.env.PORT,
   user: "root",
   password: "NewPass123!",
   database: "dr_online_db",
@@ -295,7 +295,7 @@ app.post("/api/contact", (req, res) => {
 });
 
 // ===============================
-// 11) Simple Auth (no hashing - class style)
+// 11) Simple Auth 
 // ===============================
 app.post("/api/auth/register", (req, res) => {
   const { name, email, password, role } = req.body;

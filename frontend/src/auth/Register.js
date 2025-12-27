@@ -67,7 +67,12 @@ const Register = ({ setUser }) => {
         return;
       }
 
-      const newUser = { id: data.id, name: form.name.trim(), email: form.email.trim(), role: form.role };
+      const newUser = {
+        id: data.id,
+        name: form.name.trim(),
+        email: form.email.trim(),
+        role: form.role,
+      };
       setUser(newUser);
       localStorage.setItem("dr_user", JSON.stringify(newUser));
 
@@ -134,7 +139,9 @@ const Register = ({ setUser }) => {
               </button>
             </div>
 
-            {passHint ? <small className="hint">Password: {passHint}</small> : null}
+            {passHint ? (
+              <small className="hint">Password: {passHint}</small>
+            ) : null}
           </div>
 
           <div className="field">
@@ -142,10 +149,11 @@ const Register = ({ setUser }) => {
             <select name="role" value={form.role} onChange={handleChange}>
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
-              {/* ⚠️ If you want: remove Admin from register for safety */}
               <option value="admin">Admin</option>
             </select>
-            <small className="hint">Tip: Choose “Doctor” if you will publish studies.</small>
+            <small className="hint">
+              Tip: Choose “Doctor” if you will publish studies.
+            </small>
           </div>
 
           <button type="submit" className="register-btn" disabled={loading}>
