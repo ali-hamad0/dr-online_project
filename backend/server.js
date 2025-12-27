@@ -23,12 +23,13 @@ app.use("/uploads", express.static(uploadsDir));
 // 2) MySQL Connection 
 // ===============================
 const db = mysql.createConnection({
-  host: "localhost",
-  port: 3307 || process.env.PORT,
-  user: "root",
-  password: "NewPass123!",
-  database: "dr_online_db",
+  host: process.env.DB_HOST || "localhost",
+  port: Number(process.env.DB_PORT || 3306),
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "dr_online_db",
 });
+
 
 db.connect((err) => {
   if (err) console.log("MySQL connection failed:", err);
@@ -359,5 +360,5 @@ app.use((req, res) => {
 // ===============================
 // 14) Run Server
 // ===============================
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
