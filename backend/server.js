@@ -23,11 +23,11 @@ app.use("/uploads", express.static(uploadsDir));
 // 2) MySQL Connection 
 // ===============================
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,                 
-  port: Number(process.env.DB_PORT || 3306), 
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST || "localhost",                 
+  port: Number(process.env.DB_PORT || 3307), 
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "NewPass123!",
+  database: process.env.DB_NAME || "dr_online_db",
 });
 
 
