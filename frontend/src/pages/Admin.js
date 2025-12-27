@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Admin.css";
 
-const API = "http://localhost:5000";
+const API = "https://dr-online-backend.onrender.com";
 
 const Admin = ({ user }) => {
   const isAdmin = !!user && (user.role === "admin" || user.role === "doctor");

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/Doctors.css";
 import DoctorCard from "../components/DoctorCard";
 
-const API = "http://localhost:5000";
+const API = "https://dr-online-backend.onrender.com";
 
 const Doctors = () => {
   const [doctors, setDoctors] = useState([]);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/Contact.css";
 import service1Img from "../assets/service1.png";
 
-const API = "http://localhost:5000";
+const API = "https://dr-online-backend.onrender.com";
 
 const Contact = () => {
   const [state, setState] = useState({
