@@ -150,8 +150,7 @@ const Register = ({ setUser }) => {
             <select name="role" value={form.role} onChange={handleChange}>
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
-              <option value="admin">Admin</option>
-            </select>
+             </select>
             <small className="hint">
               Tip: Choose “Doctor” if you will publish studies.
             </small>
