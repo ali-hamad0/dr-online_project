@@ -11,25 +11,45 @@ app.use(express.json());
 
 // ===============================
 // 1) Folders + Static
-// ===============================
-const uploadsDir = path.join(__dirname, "uploads");
+// ===============================// Railway Volume mount path (persistent storage)
+const basePath = process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname;
+
+const uploadsDir = path.join(basePath, "uploads");
 const doctorsDir = path.join(uploadsDir, "doctors");
 
 fs.mkdirSync(doctorsDir, { recursive: true });
 
+// Serve uploads
 app.use("/uploads", express.static(uploadsDir));
 
 // ===============================
-// 2) MySQL Connection 
+// 2) MySQL Connection (Railway)
 // ===============================
-const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",                 
-  port: Number(process.env.DB_PORT || 3307), 
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "NewPass123!",
-  database: process.env.DB_NAME || "dr_online_db",
-});
+let dbConfig;
 
+// Use Railway DATABASE_URL if available
+if (process.env.DATABASE_URL) {
+  const u = new URL(process.env.DATABASE_URL);
+
+  dbConfig = {
+    host: u.hostname,
+    port: Number(u.port || 3306),
+    user: decodeURIComponent(u.username),
+    password: decodeURIComponent(u.password),
+    database: u.pathname.replace("/", ""), // "railway"
+  };
+} else {
+  // local fallback (only for your PC)
+  dbConfig = {
+    host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT || 3307),
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "NewPass123!",
+    database: process.env.DB_NAME || "dr_online_db",
+  };
+}
+
+const db = mysql.createConnection(dbConfig);
 
 db.connect((err) => {
   if (err) console.log("MySQL connection failed:", err);
@@ -37,12 +57,15 @@ db.connect((err) => {
 });
 
 // ===============================
-// 3) Multer 
+// 3) Multer
 // ===============================
 const doctorStorage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, doctorsDir),
   filename: (req, file, cb) =>
-    cb(null, file.originalname + "_" + Date.now() + path.extname(file.originalname)),
+    cb(
+      null,
+      file.originalname + "_" + Date.now() + path.extname(file.originalname)
+    ),
 });
 
 const uploadDoctorImage = multer({
@@ -57,7 +80,10 @@ const uploadDoctorImage = multer({
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) =>
-    cb(null, file.originalname + "_" + Date.now() + path.extname(file.originalname)),
+    cb(
+      null,
+      file.originalname + "_" + Date.now() + path.extname(file.originalname)
+    ),
 });
 const upload = multer({ storage });
 
@@ -92,7 +118,9 @@ app.post("/api/doctors", uploadDoctorImage.single("image"), (req, res) => {
   const { name, specialty, bio } = req.body;
 
   if (!name || !specialty) {
-    return res.status(400).json({ ok: false, message: "name and specialty are required" });
+    return res
+      .status(400)
+      .json({ ok: false, message: "name and specialty are required" });
   }
 
   const imagePath = req.file ? `/uploads/doctors/${req.file.filename}` : null;
@@ -119,7 +147,8 @@ app.delete("/api/doctors/:id", (req, res) => {
   const q1 = "SELECT * FROM doctors WHERE id = ? LIMIT 1";
   db.query(q1, [id], (err1, rows) => {
     if (err1) return res.status(500).json({ ok: false, error: err1.message });
-    if (rows.length === 0) return res.status(404).json({ ok: false, message: "Doctor not found" });
+    if (rows.length === 0)
+      return res.status(404).json({ ok: false, message: "Doctor not found" });
 
     const doctor = rows[0];
 
@@ -130,7 +159,10 @@ app.delete("/api/doctors/:id", (req, res) => {
 
       // 3) delete image file if exists
       if (doctor.image) {
-        const localPath = path.join(__dirname, doctor.image.replace("/uploads/", "uploads/"));
+        const localPath = path.join(
+          __dirname,
+          doctor.image.replace("/uploads/", "uploads/")
+        );
         fs.unlink(localPath, () => {}); // ignore file errors
       }
 
@@ -154,7 +186,9 @@ app.post("/api/posts", (req, res) => {
   const { author, role, text } = req.body;
 
   if (!author || !role || !text) {
-    return res.status(400).json({ ok: false, message: "author, role, text are required" });
+    return res
+      .status(400)
+      .json({ ok: false, message: "author, role, text are required" });
   }
 
   const date = new Date().toLocaleString();
@@ -198,7 +232,8 @@ app.delete("/api/posts/:id", requireAdmin, (req, res) => {
 
       const q3 = "DELETE FROM posts WHERE id = ?";
       db.query(q3, [id], (err3) => {
-        if (err3) return res.status(500).json({ ok: false, error: err3.message });
+        if (err3)
+          return res.status(500).json({ ok: false, error: err3.message });
 
         return res.json({ ok: true, deleted: true });
       });
@@ -224,7 +259,9 @@ app.post("/api/posts/:postId/comments", (req, res) => {
   const { author, text } = req.body;
 
   if (!author || !text) {
-    return res.status(400).json({ ok: false, message: "author and text are required" });
+    return res
+      .status(400)
+      .json({ ok: false, message: "author and text are required" });
   }
 
   const q = "INSERT INTO comments (post_id, author, text) VALUES (?, ?, ?)";
@@ -241,13 +278,18 @@ app.post("/api/posts/:postId/like", (req, res) => {
   const postId = req.params.postId;
   const { user_name } = req.body;
 
-  if (!user_name) return res.status(400).json({ ok: false, message: "user_name is required" });
+  if (!user_name)
+    return res
+      .status(400)
+      .json({ ok: false, message: "user_name is required" });
 
   // check if already liked
-  const q1 = "SELECT id FROM post_likes WHERE post_id = ? AND user_name = ? LIMIT 1";
+  const q1 =
+    "SELECT id FROM post_likes WHERE post_id = ? AND user_name = ? LIMIT 1";
   db.query(q1, [postId, user_name], (err1, rows) => {
     if (err1) return res.status(500).json({ ok: false, error: err1.message });
-    if (rows.length > 0) return res.json({ ok: true, liked: false, message: "Already liked" });
+    if (rows.length > 0)
+      return res.json({ ok: true, liked: false, message: "Already liked" });
 
     const q2 = "INSERT INTO post_likes (post_id, user_name) VALUES (?, ?)";
     db.query(q2, [postId, user_name], (err2) => {
@@ -284,7 +326,9 @@ app.post("/api/contact", (req, res) => {
   const { full_name, email, subject, message } = req.body;
 
   if (!full_name || !email || !subject || !message) {
-    return res.status(400).json({ ok: false, message: "all fields are required" });
+    return res
+      .status(400)
+      .json({ ok: false, message: "all fields are required" });
   }
 
   const q =
@@ -296,7 +340,7 @@ app.post("/api/contact", (req, res) => {
 });
 
 // ===============================
-// 11) Simple Auth 
+// 11) Simple Auth
 // ===============================
 app.post("/api/auth/register", (req, res) => {
   const { name, email, password, role } = req.body;
@@ -307,7 +351,8 @@ app.post("/api/auth/register", (req, res) => {
       .json({ ok: false, message: "name, email, password, role are required" });
   }
 
-  const q = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+  const q =
+    "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
   db.query(q, [name, email, password, role], (err, result) => {
     if (err) return res.status(500).json({ ok: false, error: err.message });
     return res.status(201).json({ ok: true, id: result.insertId });
@@ -322,12 +367,16 @@ app.post("/api/auth/login", (req, res) => {
     if (err) return res.status(500).json({ ok: false, error: err.message });
 
     if (rows.length === 0) {
-      return res.status(401).json({ ok: false, message: "Invalid email/password" });
+      return res
+        .status(401)
+        .json({ ok: false, message: "Invalid email/password" });
     }
 
     const user = rows[0];
     if (user.password !== password) {
-      return res.status(401).json({ ok: false, message: "Invalid email/password" });
+      return res
+        .status(401)
+        .json({ ok: false, message: "Invalid email/password" });
     }
 
     return res.json({
@@ -354,11 +403,16 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 // 13) 404
 // ===============================
 app.use((req, res) => {
-  res.status(404).json({ ok: false, message: `Not found: ${req.method} ${req.originalUrl}` });
+  res.status(404).json({
+    ok: false,
+    message: `Not found: ${req.method} ${req.originalUrl}`,
+  });
 });
 
 // ===============================
 // 14) Run Server
 // ===============================
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server running on port ${PORT}`)
+);
