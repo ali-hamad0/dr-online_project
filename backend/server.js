@@ -28,9 +28,9 @@ app.use("/uploads", express.static(uploadsDir));
 const db = mysql.createConnection({
   host: "switchyard.proxy.rlwy.net",
   port: Number(49959), // 49959
-  user: root,               // root
-  password: jYnhHWErfJRNWmcTTIMItHDoZIfVtagT,       // your password
-  database: railway,           // railway
+  user: "root",               // root
+  password: "jYnhHWErfJRNWmcTTIMItHDoZIfVtagT",       // your password
+  database: "railway",           // railway
 });
 
 
