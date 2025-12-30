@@ -23,33 +23,16 @@ fs.mkdirSync(doctorsDir, { recursive: true });
 app.use("/uploads", express.static(uploadsDir));
 
 // ===============================
-// 2) MySQL Connection (Railway)
+// 2) MySQL Connection (Render -> Railway MySQL)
 // ===============================
-let dbConfig;
+const db = mysql.createConnection({
+  host: "switchyard.proxy.rlwy.net",
+  port: Number(49959), // 49959
+  user: root,               // root
+  password: jYnhHWErfJRNWmcTTIMItHDoZIfVtagT,       // your password
+  database: railway,           // railway
+});
 
-// Use Railway DATABASE_URL if available
-if (process.env.DATABASE_URL) {
-  const u = new URL(process.env.DATABASE_URL);
-
-  dbConfig = {
-    host: u.hostname,
-    port: Number(u.port || 3306),
-    user: decodeURIComponent(u.username),
-    password: decodeURIComponent(u.password),
-    database: u.pathname.replace("/", ""), // "railway"
-  };
-} else {
-  // local fallback (only for your PC)
-  dbConfig = {
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT || 3307),
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "NewPass123!",
-    database: process.env.DB_NAME || "dr_online_db",
-  };
-}
-
-const db = mysql.createConnection(dbConfig);
 
 db.connect((err) => {
   if (err) console.log("MySQL connection failed:", err);
