@@ -1,43 +1,66 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const path = require("path");
 const fs = require("fs");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    process.env.FRONTEND_URL, // set this in Render env
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ].filter(Boolean),
+  credentials: true
+}));
 app.use(express.json());
 
 // ===============================
 // 1) Folders + Static
 // ===============================// Railway Volume mount path (persistent storage)
 const basePath = process.env.RAILWAY_VOLUME_MOUNT_PATH || __dirname;
-
-const uploadsDir = path.join(basePath, "uploads");
+const uploadsDir = process.env.UPLOADS_DIR || path.join(__dirname, "uploads");
 const doctorsDir = path.join(uploadsDir, "doctors");
 
 fs.mkdirSync(doctorsDir, { recursive: true });
 
-// Serve uploads
+// Serve uploads publicly
 app.use("/uploads", express.static(uploadsDir));
-
 // ===============================
 // 2) MySQL Connection (Render -> Railway MySQL)
 // ===============================
-const db = mysql.createConnection({
-  host: process.env.DB_HOST, // switchyard.proxy.rlwy.net
-  port: Number(process.env.DB_PORT || 3306), // 49959
-  user: process.env.DB_USER, // root
-  password: process.env.DB_PASSWORD, // your password
-  database: process.env.DB_NAME, // railway
-});
+function getDbConfig() {
+  // Prefer MYSQL_URL if provided (Railway style)
+  if (process.env.MYSQL_URL) {
+    const u = new URL(process.env.MYSQL_URL);
+    return {
+      host: u.hostname,
+      port: Number(u.port || 3306),
+      user: decodeURIComponent(u.username),
+      password: decodeURIComponent(u.password),
+      database: u.pathname.replace("/", ""),
+    };
+  }
+
+  // Fallback to individual vars
+  return {
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT || 3306),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  };
+}
+
+const db = mysql.createConnection(getDbConfig());
 
 db.connect((err) => {
-  if (err) console.log("MySQL connection failed:", err);
+  if (err) console.log("MySQL connection failed:", err.message);
   else console.log("MySQL connected successfully");
 });
-
 // ===============================
 // 3) Multer
 // ===============================
@@ -140,12 +163,10 @@ app.delete("/api/doctors/:id", (req, res) => {
       if (err2) return res.status(500).json({ ok: false, error: err2.message });
 
       // 3) delete image file if exists
-      if (doctor.image) {
-        const localPath = path.join(
-          __dirname,
-          doctor.image.replace("/uploads/", "uploads/")
-        );
-        fs.unlink(localPath, () => {}); // ignore file errors
+      if (doctor.image && doctor.image.startsWith("/uploads/")) {
+        const relative = doctor.image.replace("/uploads/", "");
+        const localPath = path.join(uploadsDir, relative);
+        fs.unlink(localPath, () => {});
       }
 
       return res.json({ ok: true, deleted: true });
