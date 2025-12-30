@@ -26,13 +26,12 @@ app.use("/uploads", express.static(uploadsDir));
 // 2) MySQL Connection (Render -> Railway MySQL)
 // ===============================
 const db = mysql.createConnection({
-  host: "switchyard.proxy.rlwy.net",
-  port: Number(49959), // 49959
-  user: "root",               // root
-  password: "jYnhHWErfJRNWmcTTIMItHDoZIfVtagT",       // your password
-  database: "railway",           // railway
+  host: process.env.DB_HOST, // switchyard.proxy.rlwy.net
+  port: Number(process.env.DB_PORT || 3306), // 49959
+  user: process.env.DB_USER, // root
+  password: process.env.DB_PASSWORD, // your password
+  database: process.env.DB_NAME, // railway
 });
-
 
 db.connect((err) => {
   if (err) console.log("MySQL connection failed:", err);
