@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Register.css";
 
-const API = "https://dr-online-backend.onrender.com";
+const API = "https://dr-online-project.onrender.com";
 // const API = "http://localhost:5000";
 
 const Register = ({ setUser }) => {
