@@ -39,7 +39,7 @@ const NavBar = ({ user, onLogout }) => {
         <Link to="/contact" onClick={closeMenu}>
           Contact
         </Link>
-        {(user?.role === "admin" || user?.role === "doctor") && (
+        {(user?.role === "admin" ) && (
           <Link to="/admin" onClick={closeMenu}>
             Admin
           </Link>
