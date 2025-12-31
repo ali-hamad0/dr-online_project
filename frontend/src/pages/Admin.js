@@ -5,7 +5,7 @@ const API = "https://dr-online-project.onrender.com";
 // const API = "http://localhost:5000";
 
 const Admin = ({ user }) => {
-  const isAdmin = !!user && (user.role === "admin" || user.role === "doctor");
+  const isAdmin = !!user && user.role === "admin";
 
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
