@@ -123,7 +123,7 @@ const Admin = ({ user }) => {
       {!isAdmin ? (
         <>
           <h1>Admin Page</h1>
-          <p className="error">Access denied. You must be an admin/doctor.</p>
+          <p className="error">Access denied. You must be an admin.</p>
         </>
       ) : (
         <>

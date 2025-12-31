@@ -15,7 +15,7 @@ const Dashboard = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isAdmin = !!user && (user.role === "admin" || user.role === "doctor");
+  const isAdmin = !!user && (user.role === "admin" );
 
   const enrichPost = async (p) => {
     const [likesRes, commentsRes] = await Promise.all([
